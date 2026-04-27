@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal, InvalidOperation
 
 import click
 from flask import Flask, g, redirect, request, session, url_for
@@ -36,6 +37,17 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
+
+    @app.template_filter("fmt_amount")
+    def format_amount(value) -> str:
+        """Format numeric amounts with thousand separators and 2 decimals."""
+        if value is None:
+            return "0.00"
+        try:
+            number = Decimal(str(value))
+        except (InvalidOperation, ValueError, TypeError):
+            return "0.00"
+        return f"{number:,.2f}"
 
     @login_manager.user_loader
     def load_user(user_id):

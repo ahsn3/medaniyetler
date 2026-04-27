@@ -15,7 +15,6 @@
   --balance-bg: rgba(126, 184, 218, 0.12);
   --radius: 14px;
   --font: "DM Sans", system-ui, sans-serif;
-  --font-ar: "Noto Naskh Arabic", "DM Sans", serif;
 }
 
 *,
@@ -38,10 +37,6 @@ body {
     var(--bg-deep);
   color: var(--text);
   line-height: 1.5;
-}
-
-body.lang-ar {
-  font-family: var(--font-ar);
 }
 
 a {
@@ -103,8 +98,9 @@ a:hover {
 .brand-text small {
   font-size: 0.72rem;
   color: var(--text-muted);
-  max-width: 280px;
+  max-width: 100%;
   line-height: 1.35;
+  white-space: nowrap;
 }
 
 .nav-actions {
@@ -496,19 +492,3 @@ a:hover {
   border: 0;
 }
 
-[dir="rtl"] .data-table th,
-[dir="rtl"] .data-table td {
-  text-align: right;
-}
-[dir="rtl"] .table-card-head {
-  flex-direction: row-reverse;
-}
-[dir="rtl"] .header-inner {
-  flex-direction: row-reverse;
-}
-[dir="rtl"] .brand {
-  flex-direction: row-reverse;
-}
-[dir="rtl"] .nav-actions {
-  flex-direction: row-reverse;
-}

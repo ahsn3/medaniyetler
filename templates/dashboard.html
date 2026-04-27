@@ -8,15 +8,15 @@
 <section class="summary-grid">
   <article class="card summary-card summary-income">
     <h2>{{ _('summary_income') }}</h2>
-    <p class="summary-value">{{ "%.2f"|format(income) }}</p>
+    <p class="summary-value">{{ income|fmt_amount }}</p>
   </article>
   <article class="card summary-card summary-expense">
     <h2>{{ _('summary_expense') }}</h2>
-    <p class="summary-value">{{ "%.2f"|format(expense) }}</p>
+    <p class="summary-value">{{ expense|fmt_amount }}</p>
   </article>
   <article class="card summary-card summary-balance">
     <h2>{{ _('summary_balance') }}</h2>
-    <p class="summary-value {% if balance < 0 %}text-neg{% endif %}">{{ "%.2f"|format(balance) }}</p>
+    <p class="summary-value {% if balance < 0 %}text-neg{% endif %}">{{ balance|fmt_amount }}</p>
   </article>
 </section>
 
@@ -78,7 +78,7 @@
               <span class="badge badge-out">{{ _('type_expense') }}</span>
               {% endif %}
             </td>
-            <td class="num">{{ "%.2f"|format(row.amount|float) }}</td>
+            <td class="num">{{ row.amount|fmt_amount }}</td>
             <td class="desc">{{ row.description }}</td>
           </tr>
           {% endfor %}

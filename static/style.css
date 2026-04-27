@@ -74,18 +74,21 @@ a:hover {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg-elevated);
-  padding: 0.58rem 0.52rem;
+  padding: 0;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  align-items: stretch;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 .menu-toggle .menu-bar {
   display: block;
-  width: 100%;
-  height: 2.5px;
+  width: 20px;
+  height: 3px;
+  flex: 0 0 3px;
   background: #e8ebe9;
   border-radius: 999px;
 }
@@ -484,8 +487,6 @@ a:hover {
 
   .menu-toggle {
     display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
   }
 
   .nav-actions {

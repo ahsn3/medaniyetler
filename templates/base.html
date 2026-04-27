@@ -19,7 +19,12 @@
           <small>{{ _('org_sub') }}</small>
         </span>
       </a>
-      <nav class="nav-actions">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav-actions" id="main-nav">
         <div class="lang-switch" role="group" aria-label="Language">
           <a href="{{ request.path }}?lang=en" class="{% if current_lang == 'en' %}active{% endif %}">{{ _('lang_en') }}</a>
           <a href="{{ request.path }}?lang=ar" class="{% if current_lang == 'ar' %}active{% endif %}">{{ _('lang_ar') }}</a>
@@ -53,5 +58,32 @@
   <footer class="site-footer">
     <p>{{ _('footer_rights') }}</p>
   </footer>
+  <script>
+    (function () {
+      const menuButton = document.querySelector(".menu-toggle");
+      const nav = document.querySelector("#main-nav");
+      if (!menuButton || !nav) return;
+
+      const closeMenu = () => {
+        nav.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      };
+
+      menuButton.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("open");
+        menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+          closeMenu();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

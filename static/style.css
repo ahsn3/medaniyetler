@@ -74,15 +74,19 @@ a:hover {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg-elevated);
-  padding: 0.5rem 0.55rem;
+  padding: 0.58rem 0.52rem;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  align-items: stretch;
+  justify-content: space-between;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
-.menu-toggle span {
+.menu-toggle .menu-bar {
   display: block;
   width: 100%;
-  height: 2px;
-  margin: 4px 0;
-  background: var(--text);
+  height: 2.5px;
+  background: #e8ebe9;
   border-radius: 999px;
 }
 

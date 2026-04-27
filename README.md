@@ -30,7 +30,24 @@ Open http://127.0.0.1:5000 — register a user, then use the dashboard.
 4. Start command is already defined in the **Procfile** (`gunicorn wsgi:app`).
 5. Railway sets **`PORT`** and often **`RAILWAY_ENVIRONMENT`**; the app enables secure session cookies when those are present.
 
-After deploy, open your Railway URL, **register** the first account(s), then use **Dashboard** to add transactions.
+After deploy, open your Railway URL and register users, or initialize users/data from CLI.
+
+### Initialize users and finance data
+
+You can prepare DB tables and create first users from CLI (local or Railway shell):
+
+```bash
+flask --app wsgi:app init-db
+flask --app wsgi:app create-user --username admin --email admin@example.com
+```
+
+If you want sample data quickly:
+
+```bash
+flask --app wsgi:app seed-demo-data
+```
+
+This creates a `demo` user plus example income/expense rows only when that user has no transactions yet.
 
 ## Environment variables
 

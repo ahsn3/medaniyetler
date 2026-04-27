@@ -1,9 +1,10 @@
 import os
 
+import click
 from flask import Flask, g, redirect, request, session, url_for
 
 from app.extensions import db, login_manager
-from app.models import User
+from app.models import Transaction, User
 from app.translations import DEFAULT_LANG, SUPPORTED_LANGS, t
 
 
@@ -63,6 +64,85 @@ def create_app():
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(finance_bp)
+
+    @app.cli.command("init-db")
+    def init_db_command():
+        """Create database tables."""
+        db.create_all()
+        click.echo("Database tables created.")
+
+    @app.cli.command("create-user")
+    @click.option("--username", prompt=True, help="Username for login.")
+    @click.option("--email", prompt=True, help="User email.")
+    @click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True)
+    def create_user_command(username: str, email: str, password: str):
+        """Create a user account from CLI."""
+        normalized_username = username.strip()
+        normalized_email = email.strip().lower()
+        existing = User.query.filter(
+            (User.username == normalized_username) | (User.email == normalized_email)
+        ).first()
+        if existing:
+            click.echo("User with this username or email already exists.")
+            return
+        user = User(username=normalized_username, email=normalized_email)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        click.echo(f"User created: {normalized_username}")
+
+    @app.cli.command("seed-demo-data")
+    @click.option("--username", default="demo", show_default=True, help="Demo username.")
+    @click.option(
+        "--email",
+        default="demo@example.com",
+        show_default=True,
+        help="Demo user email.",
+    )
+    @click.option(
+        "--password",
+        default="demo12345",
+        show_default=True,
+        help="Demo user password.",
+    )
+    def seed_demo_data_command(username: str, email: str, password: str):
+        """Create one demo user and sample finance transactions."""
+        normalized_username = username.strip()
+        normalized_email = email.strip().lower()
+        user = User.query.filter(
+            (User.username == normalized_username) | (User.email == normalized_email)
+        ).first()
+        if not user:
+            user = User(username=normalized_username, email=normalized_email)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.flush()
+
+        existing_count = Transaction.query.filter_by(user_id=user.id).count()
+        if existing_count == 0:
+            seed_rows = [
+                Transaction(
+                    user_id=user.id,
+                    kind="income",
+                    amount=5000,
+                    description="Initial donation",
+                ),
+                Transaction(
+                    user_id=user.id,
+                    kind="expense",
+                    amount=800,
+                    description="Office supplies",
+                ),
+                Transaction(
+                    user_id=user.id,
+                    kind="expense",
+                    amount=1200,
+                    description="Program support",
+                ),
+            ]
+            db.session.add_all(seed_rows)
+        db.session.commit()
+        click.echo(f"Demo data is ready for user: {normalized_username}")
 
     @app.route("/")
     def index():

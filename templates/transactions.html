@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="page-head">
+  <h1>{{ _('all_transactions') }}</h1>
+  <a href="{{ url_for('finance.dashboard') }}" class="link-back">← {{ _('back_dashboard') }}</a>
+</div>
+
+<section class="summary-grid summary-grid-compact">
+  <article class="card summary-card summary-income">
+    <h2>{{ _('summary_income') }}</h2>
+    <p class="summary-value">{{ "%.2f"|format(income) }}</p>
+  </article>
+  <article class="card summary-card summary-expense">
+    <h2>{{ _('summary_expense') }}</h2>
+    <p class="summary-value">{{ "%.2f"|format(expense) }}</p>
+  </article>
+  <article class="card summary-card summary-balance">
+    <h2>{{ _('summary_balance') }}</h2>
+    <p class="summary-value {% if balance < 0 %}text-neg{% endif %}">{{ "%.2f"|format(balance) }}</p>
+  </article>
+</section>
+
+<section class="card table-card table-card-full">
+  {% if rows %}
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ _('col_date') }}</th>
+          <th>{{ _('col_type') }}</th>
+          <th>{{ _('col_amount') }}</th>
+          <th>{{ _('col_description') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td class="cell-muted">{{ row.created_at.strftime('%Y-%m-%d %H:%M') }} UTC</td>
+          <td>
+            {% if row.kind == 'income' %}
+            <span class="badge badge-in">{{ _('type_income') }}</span>
+            {% else %}
+            <span class="badge badge-out">{{ _('type_expense') }}</span>
+            {% endif %}
+          </td>
+          <td class="num">{{ "%.2f"|format(row.amount|float) }}</td>
+          <td class="desc">{{ row.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-hint">{{ _('no_transactions') }}</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="auth-card-wrap">
+  <div class="card auth-card">
+    <h1>{{ _('register_title') }}</h1>
+    <form method="post" class="stack-form" novalidate>
+      {{ form.hidden_tag() }}
+      <label class="field">
+        <span>{{ _('username') }}</span>
+        {{ form.username(class="input") }}
+        {% for e in form.username.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </label>
+      <label class="field">
+        <span>{{ _('email') }}</span>
+        {{ form.email(class="input") }}
+        {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </label>
+      <label class="field">
+        <span>{{ _('password') }}</span>
+        {{ form.password(class="input") }}
+        {% for e in form.password.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </label>
+      <label class="field">
+        <span>{{ _('confirm_password') }}</span>
+        {{ form.password2(class="input") }}
+        {% for e in form.password2.errors %}<span class="field-error">{{ _('error_password_match') }}</span>{% endfor %}
+      </label>
+      {{ form.submit(class="btn btn-primary", value=_('submit_register')) }}
+    </form>
+    <p class="auth-alt"><a href="{{ url_for('auth.login') }}">{{ _('login_title') }}</a></p>
+  </div>
+</section>
+{% endblock %}

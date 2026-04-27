@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}" dir="{% if current_lang == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ _('site_title') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="lang-{{ current_lang }}">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{{ url_for('finance.dashboard') if current_user.is_authenticated else url_for('auth.login') }}" class="brand">
+        <span class="brand-mark">◇</span>
+        <span class="brand-text">
+          <strong>Medaniyetler Köprüsü</strong>
+          <small>{{ _('org_sub') }}</small>
+        </span>
+      </a>
+      <nav class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <a href="{{ request.path }}?lang=en" class="{% if current_lang == 'en' %}active{% endif %}">{{ _('lang_en') }}</a>
+          <a href="{{ request.path }}?lang=ar" class="{% if current_lang == 'ar' %}active{% endif %}">{{ _('lang_ar') }}</a>
+          <a href="{{ request.path }}?lang=tr" class="{% if current_lang == 'tr' %}active{% endif %}">{{ _('lang_tr') }}</a>
+        </div>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('finance.dashboard') }}" class="nav-link">{{ _('nav_dashboard') }}</a>
+        <a href="{{ url_for('finance.transactions_list') }}" class="nav-link">{{ _('nav_transactions') }}</a>
+        <a href="{{ url_for('auth.logout') }}" class="nav-link nav-link-muted">{{ _('nav_logout') }}</a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="nav-link">{{ _('nav_login') }}</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-sm btn-ghost">{{ _('nav_register') }}</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ _(message) if message in ['error_login', 'error_user_exists', 'error_password_match'] else message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>{{ _('footer_rights') }}</p>
+  </footer>
+</body>
+</html>
